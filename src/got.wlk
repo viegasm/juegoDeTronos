@@ -4,7 +4,7 @@ class Personaje {
 	var property casa
 	var property conyugues = #{}
 	var property acompaniantes = #{}
-	var vivo = true
+	var property vivo = true
 	var property monedas = 0
 	var personalidad
 	
@@ -66,43 +66,11 @@ class Personaje {
 	method accionConspirativa(victima) {
 		personalidad.atacar(victima)
 	}
-
-}
-
-class Casa {
-	var patrimonio
-	var ciudad
-	var property miembros = #{}
 	
-	method esRica() {
-		return patrimonio > 1000
-	}
+	method morir() = self.vivo(false)
 	
-	method cantidadDeMiembros() {
-		return miembros.size()
-	}
-}
-
-object casaLannister inherits Casa {
-
-	method puedeCasarse(persona1, persona2) {
-		return persona1.estaSoltero() && persona2.estaSoltero()
-	}
-
-}
-
-object casaStark inherits Casa {
-	
-	method puedeCasarse(persona1, persona2) {
-		return persona1.casa().equals(persona2.casa())
-	}
-
-}
-
-object casaGuardiaNoche inherits Casa {
-	
-	method puedeCasarse(persona1, persona2) {
-		return false
+	method derrochar(porcentajeDerrochado) {
+		casa.derrocharPatrimonio(porcentajeDerrochado)
 	}
 
 }
@@ -138,6 +106,7 @@ class Conspiracion {
 	
 	var complotados = #{}
 	var victima
+	var complotCumplido = false
 	
 	constructor(_victima, _complotados){
 		self.complotPosible(_victima)
@@ -161,5 +130,8 @@ class Conspiracion {
 	
 	method ejecutarConspiracion() {
 		complotados.map({complotado => complotado.accionConspirativa(victima)})
+		complotCumplido = true
 	}
+	
+	method seCumplio() = complotCumplido && victima.peligroso()
 }
